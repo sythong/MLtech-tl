@@ -1,8 +1,9 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
-
 #include <Arduino.h>
+#include "WiFi.h"
+// #include "SmartConfig.h"
 #include "user_define.h"
 
 

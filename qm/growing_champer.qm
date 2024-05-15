@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="6.1.1" links="0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.state-machine.com/qm/qm.xsd">
- <framework name="qpc"/>
- <package name="AOs" stereotype="0x00">
-  <class name="refrigerator" superclass="qpc::QHsm">
-   <statechart properties="0x00">
+<model version="5.1.3" links="0">
+ <documentation>About this example:
+-------------------
+Simple &quot;Blinky&quot; console application for workstations (Windows, Linux, MacOS)
+(see &quot;QM Tutorial&quot; at: https://www.state-machine.com/qm/gs_tut.html)
+
+This example demonstrates:
+- Active object (Blinky) with state machine
+- Board Support Package abstraction for portability
+- BSP implementation for desktop OS (Windows, Linux, MacOS)
+- Platform-independent main() function
+- Makefile to build the generated code on desktop OS (Windows, Linux, MacOS)
+- Customized tools for building the generated code directly from QM
+
+Building the example:
+---------------------
+To build this example, you will need the QP-nano framework installed on your computer and the GNU-GCC compiler, which you can get by installing the QP-bundle from:
+
+https://www.state-machine.com/#Downloads
+
+NOTE: QP-nano has been discontinued and is NOT present in the newer releases of QP-bundle.
+
+
+Running the example:
+--------------------
+This example is a simple console application, which you can run from a terminal.
+
+For more QM examples for QP-nano see:
+https://www.state-machine.com/qpn/exa.html</documentation>
+ <framework name="qpn"/>
+ <package name="Hsm" stereotype="0x00">
+  <class name="Controller" superclass="qpn::QHsm">
+   <attribute name="obj" type="Controller" visibility="0x02" properties="0x01"/>
+   <statechart properties="0x01">
     <initial target="../1">
-     <action>mobj-&gt;ctemp=0;</action>
      <initial_glyph conn="14,3,4,3,7,6">
       <action box="0,-2,10,2"/>
      </initial_glyph>
@@ -159,5 +187,50 @@
     <state_diagram size="177,74"/>
    </statechart>
   </class>
+  <attribute name="super_Controller" type="QHsm *const" visibility="0x00" properties="0x00">
+   <code>= &amp;Controller_obj.super;</code>
+  </attribute>
+  <operation name="Controller_ctor" type="void" visibility="0x00" properties="0x00"/>
  </package>
+ <directory name="..\src">
+  <file name="Controller.cpp">
+   <text>#include &lt;Arduino.h&gt;
+#include &quot;Controller.h&quot;
+#include &quot;lcd.h&quot;
+#include &quot;rotary.h&quot;
+
+$declare${Hsm::Controller}
+$define${Hsm::Controller_ctor}
+$define${Hsm::super_Controller}
+$define${Hsm::Controller}
+</text>
+  </file>
+  <file name="Controller.h">
+   <text>#ifndef CONTROLLER_H
+#define CONTROLLER_H
+#include &quot;qpn.h&quot;
+
+enum Controller_Signals
+{
+    SETTING_SIG = Q_USER_SIG,
+    MAX_SIG,
+    START_SIG,
+    CAUTION_SIG_SIG,
+    TIME_TICK_SIG,
+    BACK_SIG,
+    CW_SIG,
+    CCW_SIG,
+    TEMP_SET_SIG,
+    HUMI_SET_SIG,
+    TIMER_BACK_SIG,
+    IGNORED_SIG,
+    TICK_SIG,
+    Max_SIG
+};
+
+$declare${Hsm::Controller_ctor}
+
+#endif</text>
+  </file>
+ </directory>
 </model>
